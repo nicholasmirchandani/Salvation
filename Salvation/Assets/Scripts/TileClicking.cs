@@ -41,7 +41,7 @@ public class TileClicking : MonoBehaviour
             {
 
                 tracker.SetActive(true);
-                tracker.transform.position = position + new Vector3(0.5f, 0.5f, -5);
+                tracker.transform.position = position + new Vector3(0.5f, 0.5f, 0);
                 playerAI.SearchPath();
             }
             else
