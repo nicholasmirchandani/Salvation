@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Team : MonoBehaviour
 {
-    List<Unit> units;
-    bool playerControlled;
-    bool hasTurn;
+    public List<Unit> units;
+    public bool playerControlled;
+    public bool hasTurn;
 
     // Start is called before the first frame update
     void Start()
