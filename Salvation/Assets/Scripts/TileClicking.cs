@@ -12,6 +12,7 @@ public class TileClicking : MonoBehaviour
     public Grid grid;
     public Tilemap tilemap;
     public GameObject player;
+    public float maxDistance;
 
     public GameObject tracker;
 
@@ -35,7 +36,7 @@ public class TileClicking : MonoBehaviour
             Vector3Int position = grid.WorldToCell(worldPoint);
             Tile tile = (Tile)tilemap.GetTile(position);
 
-            if (tile != null)
+            if (tile != null && Vector3.Magnitude(position - player.transform.position) <= maxDistance)
             {
 
                 tracker.SetActive(true);
