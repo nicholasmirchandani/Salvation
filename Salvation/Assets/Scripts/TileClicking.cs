@@ -12,13 +12,11 @@ public class TileClicking : MonoBehaviour
     public Grid grid;
     public Tilemap tilemap;
     public GameObject player;
-    private IAstarAI playerAI;
 
     public GameObject tracker;
 
     void Start()
     {
-        playerAI = player.GetComponent<IAstarAI>();
     }
 
     // Update is called once per frame
@@ -42,7 +40,7 @@ public class TileClicking : MonoBehaviour
 
                 tracker.SetActive(true);
                 tracker.transform.position = position + new Vector3(0.5f, 0.5f, 0);
-                playerAI.SearchPath();
+                player.GetComponent<IAstarAI>().SearchPath();
             }
             else
             {
