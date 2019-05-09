@@ -60,10 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Team.cs" />
     <Compile Include="Assets\Scripts\TileClicking.cs" />
-    <Compile Include="Assets\Team.cs" />
-    <Compile Include="Assets\TrackerRemover.cs" />
-    <Compile Include="Assets\Unit.cs" />
+    <Compile Include="Assets\Scripts\TrackerRemover.cs" />
+    <Compile Include="Assets\Scripts\Unit.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/nicho/Desktop/Git Projects/Salvation/Salvation/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
