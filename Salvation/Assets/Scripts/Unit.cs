@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    bool playerControlled;
-    List<Vector2> currentPath;
-    int damageDone;
-    bool hasDied;
-    bool hasTurn;
-    int maxMovement;
-    int damage;
-    int hitpoints;
-    int range;
+    public bool playerControlled;
+    public List<Vector2> currentPath;
+    public int damageDone;
+    public bool hasDied;
+    public bool hasTurn;
+    public int maxMovement;
+    public int damage;
+    public int hitpoints;
+    public int range;
 
     // Start is called before the first frame update
     void Start()
