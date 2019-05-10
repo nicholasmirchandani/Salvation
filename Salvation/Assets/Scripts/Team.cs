@@ -14,6 +14,13 @@ public class Team : MonoBehaviour
         
     }
 
+    public Team(List<Unit> units, bool playerControlled, bool hasTurn)
+    {
+        this.units = units;
+        this.playerControlled = playerControlled;
+        this.hasTurn = hasTurn;
+    }
+
     // Update is called once per frame
     void Update()
     {

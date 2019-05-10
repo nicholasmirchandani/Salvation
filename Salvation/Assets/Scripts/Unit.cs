@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
     public int damage;
     public int hitpoints;
     public int range;
-    public bool Selected = false;
+    public bool selected;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,9 @@ public class Unit : MonoBehaviour
         damage = dmg;
         hitpoints = hitPoints;
         this.range = range;
+        damageDone = 0;
+        hasDied = false;
+        selected = false;
     }
 
     public void OnMouseOver()
@@ -41,9 +44,9 @@ public class Unit : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //select unit
-            Selected = true;
+            selected = true;
         }
-        Selected = false;
+        selected = false;
     }
 
     void MoveTile(int direction)
