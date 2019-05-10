@@ -11,14 +11,7 @@ public class Team : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    public Team(List<Unit> units, bool playerControlled, bool hasTurn)
-    {
-        this.units = units;
-        this.playerControlled = playerControlled;
-        this.hasTurn = hasTurn;
+        //add units to the units list
     }
 
     // Update is called once per frame

@@ -18,25 +18,15 @@ public class Unit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        damageDone = 0;
+        hasDied = false;
+        selected = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    public Unit(bool Control,int mxMove, int dmg, int hitPoints, int range)
-    {
-        maxMovement = mxMove;
-        playerControlled = Control;
-        damage = dmg;
-        hitpoints = hitPoints;
-        this.range = range;
-        damageDone = 0;
-        hasDied = false;
-        selected = false;
     }
 
     public void OnMouseOver()
