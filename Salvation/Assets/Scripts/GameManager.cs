@@ -49,6 +49,10 @@ public class GameManager : MonoBehaviour
             {
                 continue;
             }
+            else if(!u.hasTurn)
+            {
+                continue;
+            }
             else if (u.hasTurn)
             {
                 nextTurn = true;
@@ -70,6 +74,7 @@ public class GameManager : MonoBehaviour
             u.OnMouseOver();
             if (u.Selected)
             {
+                //Add in some way to check to range
                 attackTeam.units[selectedUnit].Attack(u);
             }
         }

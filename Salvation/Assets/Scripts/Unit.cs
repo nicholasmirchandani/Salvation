@@ -66,6 +66,7 @@ public class Unit : MonoBehaviour
                 //move west
                 break;
         }
+        
     }
 
     void MoveAlongPath()
