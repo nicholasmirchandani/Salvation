@@ -63,14 +63,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Attack()
+    void Attack(Team attackTeam, Team defendTeam)
     {
-
-    }
-
-    void ComAttack()
-    {
-
+        foreach(Unit u in defendTeam.units)
+        {
+            u.OnMouseOver();
+            if (u.Selected)
+            {
+                attackTeam.units[selectedUnit].Attack(u);
+            }
+        }
     }
 
     void MoveUnit()
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Attack();
+            Attack(charTeam, comTeam);
         }
 
         setTurn(charTeam);
@@ -107,7 +109,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            ComAttack();
+            Attack(comTeam, charTeam);
         }
 
         setTurn(comTeam);

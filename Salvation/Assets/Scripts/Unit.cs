@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     public int damage;
     public int hitpoints;
     public int range;
+    public bool Selected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,12 +27,23 @@ public class Unit : MonoBehaviour
         
     }
 
-    void OnMouseOver()
+    public Unit(bool Control,int mxMove, int dmg, int hitPoints, int range)
+    {
+        maxMovement = mxMove;
+        playerControlled = Control;
+        damage = dmg;
+        hitpoints = hitPoints;
+        this.range = range;
+    }
+
+    public void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
         {
             //select unit
+            Selected = true;
         }
+        Selected = false;
     }
 
     void MoveTile(int direction)
@@ -58,7 +70,7 @@ public class Unit : MonoBehaviour
         //move along currentPath using MoveTile
     }
 
-    void Attack(Unit u)
+    public void Attack(Unit u)
     {
         this.damageDone += this.damage;
         u.hitpoints -= this.damage;
