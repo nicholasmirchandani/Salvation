@@ -11,7 +11,7 @@ public class Team : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //add units to the units list
+
     }
 
     // Update is called once per frame
