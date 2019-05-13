@@ -64,8 +64,10 @@ public class Unit : MonoBehaviour
         hasDied = true;
     }
 
+    /*
     void ResetPath()
     {
         currentPath = new List<Vector2>();
     }
+    */
 }

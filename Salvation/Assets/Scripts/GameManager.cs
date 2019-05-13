@@ -46,14 +46,14 @@ public class GameManager : MonoBehaviour
         //check to see if the last unit in the team has turn
         //if it does switch player control so the next team can go
         //As well as set the turn to the first unit
-        if (team.units[lastInt].GetComponent<Unit>().hasTurn && movePhase)
+        if (team.units[2].GetComponent<Unit>().hasTurn && movePhase)
         {
             team.units[0].GetComponent<Unit>().hasTurn = true;
             ActiveUnit = team.units[0];
             movePhase = !movePhase;
             return;
         }
-        else if(team.units[lastInt].GetComponent<Unit>().hasTurn)
+        else if(team.units[2].GetComponent<Unit>().hasTurn)
         {
             playerControl = !playerControl;
         }
@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
             {
                 u.GetComponent<Unit>().hasTurn = true;
                 ActiveUnit = u;
+                canMove = true;
                 nextTurn = false;
                 hasAttacked = false;
                 return;
@@ -115,7 +116,6 @@ public class GameManager : MonoBehaviour
         if(playerControl && movePhase && !canMove)
         {
             setTurn(CharTeam.GetComponent<Team>());
-            canMove = true;
         }
         else if(playerControl && hasAttacked)
         {
