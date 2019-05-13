@@ -4,105 +4,130 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    Team charTeam;
-    Team comTeam;
+
+    public static GameManager Instance;
+    public int numCharUnits;
     bool playerControl;
     bool movePhase;
-    int selectedUnit;
+    public bool canMove;
+    public bool canAttack;
+    public bool hasAttacked;
+    public bool unitsPlaced;
+    public GameObject selectedUnit;
+    public GameObject ActiveUnit;
+    public GameObject CharTeam;
+    public GameObject AITeam;
+    public TileClicking tc;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
         movePhase = true;
-        charTeam = new Team();
-        comTeam = new Team();
+        canAttack = false;
+        canMove = true;
         playerControl = true;
-        selectedUnit = 0;
+        unitsPlaced = true;
+        CharTeam.GetComponent<Team>().units[0].GetComponent<Unit>().hasTurn = true;
+        ActiveUnit = CharTeam.GetComponent<Team>().units[0];
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       Turn();
     }
 
     //Set the next unit in the team to their turn
-    void setTurn(Team team)
+    public void setTurn(Team team)
     {
         int lastInt = team.units.Count -1; //get the index of the last unit in the team
         //check to see if the last unit in the team has turn
         //if it does switch player control so the next team can go
         //As well as set the turn to the first unit
-        if (team.units[lastInt].hasTurn)
+        if (team.units[lastInt].GetComponent<Unit>().hasTurn && movePhase)
         {
-            team.units[0].hasTurn = true;
-            selectedUnit = 0;
-            playerControl = !playerControl;
+            team.units[0].GetComponent<Unit>().hasTurn = true;
+            ActiveUnit = team.units[0];
+            movePhase = !movePhase;
             return;
+        }
+        else if(team.units[lastInt].GetComponent<Unit>().hasTurn)
+        {
+            playerControl = !playerControl;
         }
         bool nextTurn = false;
         //Iterate through the team and set the turn to the next unit in the team
-        foreach (Unit u in team.units)
+        foreach (GameObject u in team.units)
         {
-            if(u.hasDied)
+            if (nextTurn)
+            {
+                u.GetComponent<Unit>().hasTurn = true;
+                ActiveUnit = u;
+                nextTurn = false;
+                hasAttacked = false;
+                return;
+            }
+            if (u.GetComponent<Unit>().hasDied)
             {
                 continue;
             }
-            else if(!u.hasTurn)
+            else if(!u.GetComponent<Unit>().hasTurn)
             {
                 continue;
             }
-            else if (u.hasTurn)
+            else if (u.GetComponent<Unit>().hasTurn)
             {
                 nextTurn = true;
-                u.hasTurn = !u.hasTurn;
+                u.GetComponent<Unit>().hasTurn = !u.GetComponent<Unit>().hasTurn;
             }
-            else if(nextTurn)
-            {
-                selectedUnit++;
-                u.hasTurn = true;
-                nextTurn = false;
-            }
+
+            
         }
     }
 
-    void Attack(Team attackTeam, Team defendTeam)
+    void Attack()
     {
-        foreach(Unit u in defendTeam.units)
+        if(Vector3.Magnitude(ActiveUnit.transform.position-selectedUnit.transform.position)<= ActiveUnit.GetComponent<Unit>().range)
         {
-            u.OnMouseOver();
-            if (u.Selected)
-            {
-                //Add in some way to check to range
-                attackTeam.units[selectedUnit].Attack(u);
-            }
+            ActiveUnit.GetComponent<Unit>().Attack(selectedUnit.GetComponent<Unit>());
         }
+        
     }
 
-    void MoveUnit()
-    {
-
-    }
-
-    void ComMoveUnit()
-    {
-
-    }
 
     //Controls the Logic for Player Actions
-    void PlayerTurn()
+    void Turn()
     {
         if(movePhase)
         {
-            MoveUnit();
+            tc.player = ActiveUnit;
+            tc.maxDistance = ActiveUnit.GetComponent<Unit>().maxMovement;
+        }
+        if(canAttack)
+        {
+            Attack();
+            hasAttacked = true;
+        }
+        
+        
+        if(playerControl && movePhase && !canMove)
+        {
+            setTurn(CharTeam.GetComponent<Team>());
+            canMove = true;
+        }
+        else if(playerControl && hasAttacked)
+        {
+            setTurn(CharTeam.GetComponent<Team>());
         }
         else
         {
-            Attack(charTeam, comTeam);
+            setTurn(AITeam.GetComponent<Team>());
         }
 
-        setTurn(charTeam);
+
+
     }
 
     //Controls the actions for the computer turns
@@ -110,27 +135,25 @@ public class GameManager : MonoBehaviour
     {
         if (movePhase)
         {
-            ComMoveUnit();
+            
         }
         else
         {
-            Attack(comTeam, charTeam);
+            Attack();
         }
 
-        setTurn(comTeam);
+        setTurn(AITeam.GetComponent<Team>());
     }
 
-    private void OnMouseOver()
+    public void SelectUnit(GameObject unit)
     {
-        //Left Click
-        if(Input.GetMouseButtonDown(0))
-        {
-
-        }
-        //Right Click
-        if (Input.GetMouseButtonDown(1))
-        {
-
-        }
+        selectedUnit = unit;
     }
+
+    public void placeUnits()
+    {
+        
+    }
+
+    
 }

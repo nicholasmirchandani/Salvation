@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Team : MonoBehaviour
 {
-    public List<Unit> units;
+    
+    public List<GameObject> units;
     public bool playerControlled;
     public bool hasTurn;
 

@@ -12,14 +12,13 @@ public class Unit : MonoBehaviour
     public int damage;
     public int hitpoints;
     public int range;
-    public bool selected;
 
     // Start is called before the first frame update
     void Start()
     {
+        hitpoints = 100;
         damageDone = 0;
         hasDied = false;
-        selected = false;
     }
 
     // Update is called once per frame
@@ -30,17 +29,34 @@ public class Unit : MonoBehaviour
 
     public void OnMouseOver()
     {
+        if(hasDied)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
-            selected = true;
+            //select unit
+            GameManager.Instance.SelectUnit(gameObject);
+            return;
         }
-        selected = false;
+        if (Input.GetMouseButtonDown(1))
+        {
+            //select unit
+            GameManager.Instance.canAttack = true;
+            GameManager.Instance.SelectUnit(gameObject);
+            return;
+
+        }
     }
 
     public void Attack(Unit u)
     {
         this.damageDone += this.damage;
         u.hitpoints -= this.damage;
+        if(hitpoints<=0)
+        {
+            Die();
+        }
     }
 
     void Die()
