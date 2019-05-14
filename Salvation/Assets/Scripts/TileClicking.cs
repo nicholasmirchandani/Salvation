@@ -31,6 +31,12 @@ public class TileClicking : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
+
+            if(player == null)
+            {
+                return;
+            }
+
             Ray ray = levelCamera.ScreenPointToRay(Input.mousePosition);
             Vector3 worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
             Vector3Int position = grid.WorldToCell(worldPoint);

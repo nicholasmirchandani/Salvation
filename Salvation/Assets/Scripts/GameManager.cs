@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         hasMoved = false;
         playerControl = true;
         unitsPlaced = true;
+        selectedUnit = null;
         ActiveTeam = CharTeam.GetComponent<Team>();
         ActiveUnit = ActiveTeam.units[0];
         ActiveUnit.GetComponent<Unit>().hasTurn = true;
@@ -213,8 +214,11 @@ public class GameManager : MonoBehaviour
 
     public void SelectUnit(GameObject unit)
     {
-        selectedUnit.GetComponent<Unit>().attackCircle.SetActive(false);
-        selectedUnit.GetComponent<Unit>().moveCircle.SetActive(false);
+        if(selectedUnit != null)
+        {
+            selectedUnit.GetComponent<Unit>().attackCircle.SetActive(false);
+            selectedUnit.GetComponent<Unit>().moveCircle.SetActive(false);
+        }
         selectedUnit = unit;
         selectedUnit.GetComponent<Unit>().attackCircle.SetActive(true);
         selectedUnit.GetComponent<Unit>().moveCircle.SetActive(true);
