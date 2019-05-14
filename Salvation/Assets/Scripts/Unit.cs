@@ -16,12 +16,13 @@ public class Unit : MonoBehaviour
     public bool prevMoving;
     public int range;
     public bool delayCall;
+    public string name;
     bool prevSpaceDown;
 
     // Start is called before the first frame update
     void Start()
     {
-        hitpoints = 100;
+        
         damageDone = 0;
         hasDied = false;
         prevMoving = false;
@@ -85,6 +86,7 @@ public class Unit : MonoBehaviour
     {
         gameObject.SetActive(false);
         hasDied = true;
+        GameManager.Instance.CheckWin();
     }
 
     

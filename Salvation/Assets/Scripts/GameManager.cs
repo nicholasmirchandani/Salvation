@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,9 +20,15 @@ public class GameManager : MonoBehaviour
     public GameObject ActiveUnit;
     public GameObject CharTeam;
     public GameObject AITeam;
+    public GameObject Canvas;
     public Team ActiveTeam;
     public TileClicking tc;
-    int maxTeamSize = 3;
+
+    public Text TurnText;
+    public Text PhaseText;
+    public Text ActiveUnitText;
+    public Text SelectedUnitText;
+    int activeTeamSize;
     int curActive = 0;
     
 
@@ -38,37 +45,52 @@ public class GameManager : MonoBehaviour
         ActiveTeam = CharTeam.GetComponent<Team>();
         ActiveUnit = ActiveTeam.units[0];
         ActiveUnit.GetComponent<Unit>().hasTurn = true;
-        
+        activeTeamSize = ActiveTeam.teamSize;
+        TurnText.text = "Player 1 Turn";
+        PhaseText.text = "Move Phase";
+        SelectedUnitText.text = "";
+        setActiveUnitText();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             NextAction();
         }
+        activeTeamSize = ActiveTeam.teamSize;
     }
 
     //Set the next unit in the team to their turn
     public void NextActiveUnit()
     {
-        int lastInt = maxTeamSize -1; //get the index of the last unit in the team
+        int lastInt = activeTeamSize -1; //get the index of the last unit in the team
         //check to see if the last unit in the team has turn
         //if it does switch player control so the next team can go
         //As well as set the turn to the first unit
         //Iterate through the team and set the turn to the next unit in the team
 
-        for(int i = curActive;i<=maxTeamSize; i++)
+       
+
+        for (int i = curActive;i<=activeTeamSize; i++)
         {
-            if (i == maxTeamSize - 1)
+            if (i == activeTeamSize - 1)
             {
                 if (attackPhase)
+                {
+                    PhaseText.text = "Move Phase";
                     SwitchTeam();
+                }
                 else
                 {
                     movePhase = false;
                     attackPhase = true;
+                    PhaseText.text = "Attack Phase";
                     curActive = 0;
                     SwitchActiveUnit(ActiveTeam.units[curActive]);
                     StartCoroutine("Attack");
@@ -77,7 +99,7 @@ public class GameManager : MonoBehaviour
             }
             else if (ActiveTeam.units[i + 1].GetComponent<Unit>().hasDied)
             {
-                continue;
+               continue;
             }
             else
             {
@@ -110,9 +132,9 @@ public class GameManager : MonoBehaviour
         if(Vector3.Magnitude(ActiveUnit.transform.position-selectedUnit.transform.position)<= ActiveUnit.GetComponent<Unit>().range && canAttack)
         {
             ActiveUnit.GetComponent<Unit>().Attack(selectedUnit.GetComponent<Unit>());
+            setSelectedUnitText();
             canAttack = false;
             hasAttacked = true;
-            //NextActiveUnit();
         }
         canAttack = false;
 
@@ -138,19 +160,6 @@ public class GameManager : MonoBehaviour
             else
                 StartCoroutine("Attack");
         }
-
-        /*
-        if (!playerControl && movePhase && !canMove)
-        {
-            NextActiveUnit();
-        }
-        else if (!playerControl && hasAttacked)
-        {
-            NextActiveUnit();
-        }
-        */
-
-
     }
 
     public void SwitchTeam()
@@ -159,9 +168,11 @@ public class GameManager : MonoBehaviour
         {
             case true:
                 ActiveTeam = AITeam.GetComponent<Team>();
+                TurnText.text = "Player 2 Turn";
                 break;
             case false:
                 ActiveTeam = CharTeam.GetComponent<Team>();
+                TurnText.text = "Player 1 Turn";
                 break;
         }
         playerControl = !playerControl;
@@ -174,7 +185,13 @@ public class GameManager : MonoBehaviour
 
     public void SwitchActiveUnit(GameObject u)
     {
+        if (u.GetComponent<Unit>().hasDied)
+        {
+            NextActiveUnit();
+            return;
+        }
         ActiveUnit = u;
+        setActiveUnitText();
         if (movePhase)
         {
             tc.player = ActiveUnit;
@@ -187,19 +204,72 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
-
     public void SelectUnit(GameObject unit)
     {
         selectedUnit = unit;
+        setSelectedUnitText();
     }
 
-    public void placeUnits()
+    public void CheckWin()
     {
+        bool hasWon = true;
+
+        foreach (GameObject u in CharTeam.GetComponent<Team>().units)
+        {
+            if (u.GetComponent<Unit>().hasDied == false)
+            {
+                hasWon = false;
+            }
+        }
+
+        if(hasWon)
+        {
+            Debug.Log("QUIT");
+            Application.Quit();
+        }
+        
+
+        hasWon = true;
+
+        foreach (GameObject u in AITeam.GetComponent<Team>().units)
+        {
+            if (u.GetComponent<Unit>().hasDied == false)
+            {
+                hasWon = false;
+            }
+        }
+
+        if (hasWon)
+        {
+            Debug.Log("QUIT");
+            Application.Quit();
+        }
         
     }
 
-    //TODO: Bug fix for a unit being given a turn when dead
-    //TODO: Bug Fix to allow a unit to be able to stay where they are on their turn
-    
+    public void setSelectedUnitText()
+    {
+        SelectedUnitText.text = "Selected Unit: \n";
+        SelectedUnitText.text += "Team: ASSHOLES \n";
+        SelectedUnitText.text += "Name: " + selectedUnit.GetComponent<Unit>().name + "\n";
+        SelectedUnitText.text += "Health: " + selectedUnit.GetComponent<Unit>().hitpoints + "\n";
+        SelectedUnitText.text += "Movement: " + selectedUnit.GetComponent<Unit>().maxMovement + "\n";
+        SelectedUnitText.text += "Range: " + selectedUnit.GetComponent<Unit>().range + "\n";
+        SelectedUnitText.text += "Damage: " + selectedUnit.GetComponent<Unit>().damage + "\n";
+        SelectedUnitText.text += "Damage Dealt: " + selectedUnit.GetComponent<Unit>().damageDone + "\n";
+    }
+
+    public void setActiveUnitText()
+    {
+        ActiveUnitText.text = "Active Unit: \n";
+        ActiveUnitText.text += "Team: Player \n";
+        ActiveUnitText.text += "Name: " + ActiveUnit.GetComponent<Unit>().name + "\n";
+        ActiveUnitText.text += "Health: " + ActiveUnit.GetComponent<Unit>().hitpoints + "\n";
+        ActiveUnitText.text += "Movement: " + ActiveUnit.GetComponent<Unit>().maxMovement + "\n";
+        ActiveUnitText.text += "Range: " + ActiveUnit.GetComponent<Unit>().range + "\n";
+        ActiveUnitText.text += "Damage: " + ActiveUnit.GetComponent<Unit>().damage + "\n";
+        ActiveUnitText.text += "Damage Dealt: " + ActiveUnit.GetComponent<Unit>().damageDone + "\n";
+    }
+
+
 }
