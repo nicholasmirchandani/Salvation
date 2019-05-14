@@ -43,7 +43,9 @@ public class TileClicking : MonoBehaviour
                 tracker.transform.position = position + new Vector3(0.5f, 0.5f, 0);
                 player.GetComponent<IAstarAI>().SearchPath();
                 player = null;
-                GameManager.Instance.canMove = false;
+                //GameManager.Instance.canMove = false;
+                //GameManager.Instance.hasMoved = true;
+                //GameManager.Instance.Turn();
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Pathfinding;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,10 @@ public class Unit : MonoBehaviour
     public int maxMovement;
     public int damage;
     public int hitpoints;
+    public bool moving;
+    public bool prevMoving;
     public int range;
+    public bool delayCall;
 
     // Start is called before the first frame update
     void Start()
@@ -19,12 +23,28 @@ public class Unit : MonoBehaviour
         hitpoints = 100;
         damageDone = 0;
         hasDied = false;
+        prevMoving = false;
+        moving = false;
+        delayCall = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+            moving = !gameObject.GetComponent<IAstarAI>().reachedEndOfPath; //If the unit is moving
+            
+            if (!moving && prevMoving)
+            {
+                if(delayCall)
+                {
+                    GameManager.Instance.NextAction();
+                }
+                else
+                {
+                    delayCall = true;
+                }
+            }
+            prevMoving = moving;
     }
 
     public void OnMouseOver()
@@ -42,8 +62,8 @@ public class Unit : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             //select unit
-            GameManager.Instance.canAttack = true;
-            GameManager.Instance.SelectUnit(gameObject);
+            if(GameManager.Instance.selectedUnit !=null)
+                GameManager.Instance.canAttack = true;
             return;
 
         }
@@ -63,6 +83,8 @@ public class Unit : MonoBehaviour
     {
         hasDied = true;
     }
+
+    
 
     /*
     void ResetPath()
