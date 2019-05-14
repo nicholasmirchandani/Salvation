@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-C:/Users/dude1/Desktop/Git Projects/Salvation/Salvation/Builds/Salvation.exe
+C:/Users/nicho/Desktop/Git Projects/Salvation/Salvation/Builds/Salvation.exe
 SceneListBegin?
 Assets/Scenes/MainMenu.unity
 Assets/Scenes/Nic Scene.unity
@@ -58,7 +58,7 @@ abf1930d8126d0b2e00e9449129a0190 UnityEngine.UI.dll:UnityEngine.EventSystems.Tou
 64e54c0cbb0177c5ea26f340efb9ff85 UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
 aac6f99dc84c9a5a1171e2927e8f7014 AstarPathfindingProject.dll:Pathfinding.AIPath
 98ad81e9f689a492509f07e75b810aaa Unity.TextMeshPro.dll:TMPro.TMP_InputField
-d83cccfc3777841557b3f49af0edce53 Assembly-CSharp.dll:.Unit
+8af7d2425d28fe5b88a4dcc1cd1ea213 Assembly-CSharp.dll:.Unit
 cf9f5cf2c3145a37ac07f00e50e460f9 UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.UI.dll:UnityEngine.EventSystems.BaseInput
 5fc094978ce3e3591a7500ed380d854a UnityEngine.UI.dll:UnityEngine.UI.Button
@@ -126,13 +126,14 @@ d251bf88db6c95a6b1aa0b69298da9ef UnityEngine.SpatialTracking.dll:UnityEngine.Spa
 7fb9de8dcf73854b6b328eca1f7a6e6d Unity.Analytics.Tracker.dll:UnityEngine.Analytics.AnalyticsTracker
 1d6bc7fb33fcc56237df7c329c31fac2 AstarPathfindingProject.dll:Pathfinding.AILerp
 46cdbf48786f1faf06540c1959cd7b81 AstarPathfindingProject.dll:Pathfinding.NodeLink
-81569795199d261ca59a4b85de598742 Assembly-CSharp.dll:.GameManager
+803f5bb21d241f7232fc9ffc83d5eaf8 Assembly-CSharp.dll:.GameManager
 94017dcc9f00fe671ea7dc427b4da011 Unity.TextMeshPro.dll:TMPro.TMP_SpriteAsset
 427e4ae6223362877cde7ac01baa97c3 AstarPathfindingProject.dll:Pathfinding.NodeLink2
 bcb1cb4a9395b5b5db8b7a2dd4db50da AstarPathfindingProject.dll:.AstarPath
 b3ab2106268377ffe25dd18ac23dca28 Unity.TextMeshPro.dll:TMPro.TMP_Asset
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.Analytics.Editor.dll:UnityEditor.Analytics.AnalyticsEventTrackerEditor
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.TextMeshPro.dll:TMPro.TMP_SpriteAnimator
+7fa37ffd16a061738843bb1c712cac7d Assembly-CSharp.dll:.MenuManager
 e59b4ddbf539212f3d2f911f95cc1bb3 AstarPathfindingProject.dll:Pathfinding.Examples.AstarSmoothFollow2
 0cceca996e1eb1401d74a841f34c4f83 AstarPathfindingProject.dll:Pathfinding.SimpleSmoothModifier
 2e7cb4825ef57e1ad077744e3214948d Assembly-CSharp.dll:.Team
@@ -195,4 +196,3 @@ c6666661329916e218bee7f5e79e60f5 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 3165968ba45c74472d279ba04455fccb Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
 c0e31dd31c35455f422978da26bb908a AstarPathfindingProject.dll:Pathfinding.Patrol
 8649814970b42d345b89944b862453cc Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
-7fa37ffd16a061738843bb1c712cac7d Assembly-CSharp.dll:.MenuManager
