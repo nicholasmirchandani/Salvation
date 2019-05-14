@@ -29,7 +29,7 @@ public class TileClicking : MonoBehaviour
     //Optimization: Only call onMouseOver if mouse is over tilemap
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             Ray ray = levelCamera.ScreenPointToRay(Input.mousePosition);
             Vector3 worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);

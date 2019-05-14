@@ -18,11 +18,14 @@ public class Unit : MonoBehaviour
     public bool delayCall;
     public string name;
     bool prevSpaceDown;
+    public GameObject attackCircle;
+    public GameObject moveCircle;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        attackCircle.SetActive(false);
+        moveCircle.SetActive(false);
         damageDone = 0;
         hasDied = false;
         prevMoving = false;
@@ -86,6 +89,8 @@ public class Unit : MonoBehaviour
     {
         gameObject.SetActive(false);
         hasDied = true;
+        attackCircle.SetActive(false);
+        moveCircle.SetActive(false);
         GameManager.Instance.CheckWin();
     }
 

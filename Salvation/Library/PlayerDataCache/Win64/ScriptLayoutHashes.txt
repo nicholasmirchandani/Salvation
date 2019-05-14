@@ -2,6 +2,7 @@ Win64
 PlayerPath?
 C:/Users/dude1/Desktop/Git Projects/Salvation/Salvation/Builds/Salvation.exe
 SceneListBegin?
+Assets/Scenes/MainMenu.unity
 Assets/Scenes/Nic Scene.unity
 SceneListEnd?
 557b8d683142468c7c52e0163c1928a6 AstarPathfindingProject.dll:Pathfinding.ProceduralGridMover
@@ -194,3 +195,4 @@ c6666661329916e218bee7f5e79e60f5 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 3165968ba45c74472d279ba04455fccb Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
 c0e31dd31c35455f422978da26bb908a AstarPathfindingProject.dll:Pathfinding.Patrol
 8649814970b42d345b89944b862453cc Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
+7fa37ffd16a061738843bb1c712cac7d Assembly-CSharp.dll:.MenuManager

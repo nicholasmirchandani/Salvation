@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
     public GameObject Canvas;
     public Team ActiveTeam;
     public TileClicking tc;
-
+    public GameObject MoveCircle;
     public Text TurnText;
     public Text PhaseText;
     public Text ActiveUnitText;
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
         ActiveTeam = CharTeam.GetComponent<Team>();
         ActiveUnit = ActiveTeam.units[0];
         ActiveUnit.GetComponent<Unit>().hasTurn = true;
+        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
+        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
         activeTeamSize = ActiveTeam.teamSize;
         TurnText.text = "Player 1 Turn";
         PhaseText.text = "Move Phase";
@@ -57,7 +60,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            SceneManager.LoadScene(0);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -190,7 +193,11 @@ public class GameManager : MonoBehaviour
             NextActiveUnit();
             return;
         }
+        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(false);
+        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(false);
         ActiveUnit = u;
+        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
+        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
         setActiveUnitText();
         if (movePhase)
         {
@@ -206,7 +213,11 @@ public class GameManager : MonoBehaviour
 
     public void SelectUnit(GameObject unit)
     {
+        selectedUnit.GetComponent<Unit>().attackCircle.SetActive(false);
+        selectedUnit.GetComponent<Unit>().moveCircle.SetActive(false);
         selectedUnit = unit;
+        selectedUnit.GetComponent<Unit>().attackCircle.SetActive(true);
+        selectedUnit.GetComponent<Unit>().moveCircle.SetActive(true);
         setSelectedUnitText();
     }
 
@@ -224,10 +235,9 @@ public class GameManager : MonoBehaviour
 
         if(hasWon)
         {
-            Debug.Log("QUIT");
-            Application.Quit();
+            SceneManager.LoadScene(0);
         }
-        
+
 
         hasWon = true;
 
@@ -241,16 +251,15 @@ public class GameManager : MonoBehaviour
 
         if (hasWon)
         {
-            Debug.Log("QUIT");
-            Application.Quit();
+            SceneManager.LoadScene(0);
         }
-        
+
     }
 
     public void setSelectedUnitText()
     {
         SelectedUnitText.text = "Selected Unit: \n";
-        SelectedUnitText.text += "Team: ASSHOLES \n";
+        SelectedUnitText.text += "Team: " + selectedUnit.transform.parent.gameObject.name + "\n";
         SelectedUnitText.text += "Name: " + selectedUnit.GetComponent<Unit>().name + "\n";
         SelectedUnitText.text += "Health: " + selectedUnit.GetComponent<Unit>().hitpoints + "\n";
         SelectedUnitText.text += "Movement: " + selectedUnit.GetComponent<Unit>().maxMovement + "\n";
@@ -262,7 +271,7 @@ public class GameManager : MonoBehaviour
     public void setActiveUnitText()
     {
         ActiveUnitText.text = "Active Unit: \n";
-        ActiveUnitText.text += "Team: Player \n";
+        ActiveUnitText.text += "Team: " + ActiveUnit.transform.parent.gameObject.name + "\n";
         ActiveUnitText.text += "Name: " + ActiveUnit.GetComponent<Unit>().name + "\n";
         ActiveUnitText.text += "Health: " + ActiveUnit.GetComponent<Unit>().hitpoints + "\n";
         ActiveUnitText.text += "Movement: " + ActiveUnit.GetComponent<Unit>().maxMovement + "\n";
