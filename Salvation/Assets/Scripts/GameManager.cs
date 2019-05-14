@@ -270,6 +270,7 @@ public class GameManager : MonoBehaviour
         SelectedUnitText.text += "Range: " + selectedUnit.GetComponent<Unit>().range + "\n";
         SelectedUnitText.text += "Damage: " + selectedUnit.GetComponent<Unit>().damage + "\n";
         SelectedUnitText.text += "Damage Dealt: " + selectedUnit.GetComponent<Unit>().damageDone + "\n";
+        DisplayCircles(selectedUnit);
     }
 
     public void setActiveUnitText()
@@ -282,6 +283,16 @@ public class GameManager : MonoBehaviour
         ActiveUnitText.text += "Range: " + ActiveUnit.GetComponent<Unit>().range + "\n";
         ActiveUnitText.text += "Damage: " + ActiveUnit.GetComponent<Unit>().damage + "\n";
         ActiveUnitText.text += "Damage Dealt: " + ActiveUnit.GetComponent<Unit>().damageDone + "\n";
+        DisplayCircles(ActiveUnit);
+    }
+
+    public void DisplayCircles(GameObject u)
+    {
+        Unit unit = u.GetComponent<Unit>();
+        float moveScale = unit.maxMovement * 10;
+        float attackScale = unit.range * 10;
+        unit.moveCircle.transform.localScale = new Vector3(moveScale, moveScale);
+        unit.attackCircle.transform.localScale = new Vector3(attackScale, attackScale);
     }
 
 
