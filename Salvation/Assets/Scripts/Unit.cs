@@ -33,7 +33,7 @@ public class Unit : MonoBehaviour
     {
             moving = !gameObject.GetComponent<IAstarAI>().reachedEndOfPath; //If the unit is moving
             
-            if (!moving && prevMoving)
+            if (!moving && prevMoving && GameManager.Instance.movePhase)
             {
                 if(delayCall)
                 {
@@ -59,11 +59,11 @@ public class Unit : MonoBehaviour
             GameManager.Instance.SelectUnit(gameObject);
             return;
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && GameManager.Instance.attackPhase)
         {
-            //select unit
-            if(GameManager.Instance.selectedUnit !=null)
-                GameManager.Instance.canAttack = true;
+            //attack unit
+            GameManager.Instance.SelectUnit(gameObject);
+            GameManager.Instance.canAttack = true;
             return;
 
         }
@@ -73,14 +73,15 @@ public class Unit : MonoBehaviour
     {
         this.damageDone += this.damage;
         u.hitpoints -= this.damage;
-        if(hitpoints<=0)
+        if(u.hitpoints<=0)
         {
-            Die();
+            u.Die();
         }
     }
 
     void Die()
     {
+        gameObject.SetActive(false);
         hasDied = true;
     }
 

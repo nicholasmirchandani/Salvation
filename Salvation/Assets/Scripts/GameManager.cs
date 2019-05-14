@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public int numCharUnits;
     bool playerControl;
-    bool movePhase;
-    bool attackPhase;
+    public bool movePhase;
+    public bool attackPhase;
     public bool canMove;
     public bool hasMoved;
     public bool canAttack;
@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour
     //Set the next unit in the team to their turn
     public void NextActiveUnit()
     {
-        Debug.Log("Set Turn called");
         int lastInt = maxTeamSize -1; //get the index of the last unit in the team
         //check to see if the last unit in the team has turn
         //if it does switch player control so the next team can go
@@ -61,13 +60,15 @@ public class GameManager : MonoBehaviour
         {
             if (i == maxTeamSize - 1)
             {
-                if (!movePhase)
+                if (attackPhase)
                     SwitchTeam();
                 else
                 {
                     movePhase = false;
+                    attackPhase = true;
                     curActive = 0;
                     SwitchActiveUnit(ActiveTeam.units[curActive]);
+                    StartCoroutine("Attack");
                 }
                 return;
             }
@@ -83,72 +84,60 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        /*
-        foreach (GameObject u in ActiveTeam.units)
-        {
-            
-            if (u.GetComponent<Unit>().hasDied)
-            {
-                continue;
-            }
-            else if(u.GetComponent<Unit>().Equals(ActiveUnit))
-            {
-                continue;
-            }
-            else if (u.GetComponent<Unit>().Equals(ActiveUnit))
-            {
-                nextTurn = true;
-            }
-            else if (nextTurn)
-            {
-                Debug.Log("Switch Unit called");
-                SwitchActiveUnit(u);
-                nextTurn = false;
-                if (movePhase)
-                {
-                    canMove = true;
-                }
-                else
-                {
-                    canAttack = true;
-                    hasAttacked = false;
-                }
-                return;
-            }
-
-        }
-        */
+  
     }
 
-    void Attack()
+    IEnumerator Attack()
     {
+        Debug.Log("Enters Attack");
+        while(!canAttack || selectedUnit == null)
+        {
+            if(!attackPhase)
+            {
+                yield return null;
+            }
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                canAttack = false;
+                NextAction();
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.02f);
+        }
+        Debug.Log("Attacking " + selectedUnit);
         if(Vector3.Magnitude(ActiveUnit.transform.position-selectedUnit.transform.position)<= ActiveUnit.GetComponent<Unit>().range && canAttack)
         {
             ActiveUnit.GetComponent<Unit>().Attack(selectedUnit.GetComponent<Unit>());
             canAttack = false;
             hasAttacked = true;
-            NextActiveUnit();
+            //NextActiveUnit();
         }
-        
+        canAttack = false;
+
+        //End of attack, now go to next aaction and next selected unit
+        NextAction();
+        yield return null;
     }
 
 
     //Controls the Logic for Player Actions
     public void NextAction()
     {
+        Debug.Log("NEXT");
         if(movePhase)
         {
             NextActiveUnit();
         }
-        else if(canAttack && selectedUnit != null)
+        else if(attackPhase)
         {
-            if(playerControl)
-                Attack();
+            NextActiveUnit();
+            if (playerControl)
+                StartCoroutine("Attack");
             else
-                Attack();
+                StartCoroutine("Attack");
         }
 
-
+        /*
         if (!playerControl && movePhase && !canMove)
         {
             NextActiveUnit();
@@ -157,7 +146,7 @@ public class GameManager : MonoBehaviour
         {
             NextActiveUnit();
         }
-        
+        */
 
 
     }
@@ -173,10 +162,12 @@ public class GameManager : MonoBehaviour
                 ActiveTeam = CharTeam.GetComponent<Team>();
                 break;
         }
-        SwitchActiveUnit(ActiveTeam.units[0]);
         playerControl = !playerControl;
         movePhase = true;
+        attackPhase = false;
         canMove = true;
+        curActive = 0;
+        SwitchActiveUnit(ActiveTeam.units[curActive]);
     }
 
     public void SwitchActiveUnit(GameObject u)
@@ -190,7 +181,7 @@ public class GameManager : MonoBehaviour
         }
         else if (attackPhase)
         {
-
+            //TODO: Add attack phase setup code as needed for active unit
         }
     }
 
