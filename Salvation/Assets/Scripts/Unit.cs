@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
     public bool prevMoving;
     public int range;
     public bool delayCall;
+    bool prevSpaceDown;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,7 @@ public class Unit : MonoBehaviour
         prevMoving = false;
         moving = false;
         delayCall = false;
+        prevSpaceDown = false;
     }
 
     // Update is called once per frame

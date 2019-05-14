@@ -44,6 +44,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            NextAction();
+        }
     }
 
     //Set the next unit in the team to their turn
@@ -53,7 +57,6 @@ public class GameManager : MonoBehaviour
         //check to see if the last unit in the team has turn
         //if it does switch player control so the next team can go
         //As well as set the turn to the first unit
-        //bool nextTurn = false;
         //Iterate through the team and set the turn to the next unit in the team
 
         for(int i = curActive;i<=maxTeamSize; i++)
@@ -98,8 +101,7 @@ public class GameManager : MonoBehaviour
             }
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                canAttack = false;
-                NextAction();
+                Debug.Log("Exit Attack");
                 yield return null;
             }
             yield return new WaitForSeconds(0.02f);
@@ -185,7 +187,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Controls the actions for the computer turns
+    
 
     public void SelectUnit(GameObject unit)
     {
@@ -197,5 +199,7 @@ public class GameManager : MonoBehaviour
         
     }
 
+    //TODO: Bug fix for a unit being given a turn when dead
+    //TODO: Bug Fix to allow a unit to be able to stay where they are on their turn
     
 }
