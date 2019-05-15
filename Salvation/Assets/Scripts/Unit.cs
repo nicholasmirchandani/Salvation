@@ -21,6 +21,8 @@ public class Unit : MonoBehaviour
     public GameObject attackCircle;
     public GameObject moveCircle;
     public int id;
+    public int attackDamage;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,7 @@ public class Unit : MonoBehaviour
         attackCircle.SetActive(false);
         moveCircle.SetActive(false);
         damageDone = 0;
+        attackDamage = 0;
         hasDied = false;
         prevMoving = false;
         moving = false;
@@ -101,8 +104,10 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit u)
     {
-        this.damageDone += this.damage;
-        u.hitpoints -= this.damage;
+
+        attackDamage = Random.Range(0, damage + 1);
+        this.damageDone += this.attackDamage;
+        u.hitpoints -= this.attackDamage;
         if(u.hitpoints<=0)
         {
             u.Die();

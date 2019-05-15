@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     Vector3 START_POSITION = new Vector3(1000, 1000);
     Quaternion START_DIRECTION = new Quaternion();
     
+    
 
     // Start is called before the first frame update
     void Start()
@@ -504,6 +505,7 @@ public class GameManager : MonoBehaviour
         ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
         ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
         ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
+        PhaseText.text = "Move Phase";
         hasBegun = true;
         SetIDs();
         setActiveUnitText();
