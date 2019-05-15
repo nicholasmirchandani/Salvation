@@ -55,6 +55,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\MenuManager.cs" />
+     <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\Team.cs" />
      <Compile Include="Assets\Scripts\TileClicking.cs" />
      <Compile Include="Assets\Scripts\TrackerRemover.cs" />
