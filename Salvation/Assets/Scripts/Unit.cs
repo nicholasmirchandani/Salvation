@@ -42,6 +42,7 @@ public class Unit : MonoBehaviour
             
             if (!moving && prevMoving && GameManager.Instance.movePhase)
             {
+            /*
                 if(delayCall)
                 {
                     GameManager.Instance.NextAction();
@@ -50,7 +51,9 @@ public class Unit : MonoBehaviour
                 {
                     delayCall = true;
                 }
-            }
+                */
+            GameManager.Instance.NextAction();
+        }
             prevMoving = moving;
     }
 
@@ -62,8 +65,28 @@ public class Unit : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            //select unit
-            GameManager.Instance.SelectUnit(gameObject);
+            //PLace unit
+            if (GameManager.Instance.placingUnit)
+            {
+                GameManager.Instance.ActiveTeam.GetComponent<Team>().units.Add(GameManager.Instance.unitBeingPlaced);
+                GameManager.Instance.unitBeingPlaced = null;
+                GameManager.Instance.placingUnit = false;
+                GameManager.Instance.unitPlaced = true;
+                GameManager.Instance.totalUnits++;
+                if(GameManager.Instance.totalUnits==6)
+                {
+                    GameManager.Instance.setTeamPhase = false;
+                    GameManager.Instance.PlaceUnitsControl();
+                    return;
+                }
+                GameManager.Instance.PlaceUnitsControl();
+                Debug.Log("PLACE");
+            }    
+            else
+            {
+                //select unit
+                GameManager.Instance.SelectUnit(gameObject);
+            }
             return;
         }
         if (Input.GetMouseButtonDown(1) && GameManager.Instance.attackPhase)

@@ -3,26 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Pathfinding;
 
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance;
     public int numCharUnits;
+    public int totalUnits;
     bool playerControl;
+    public bool placingUnit;
     public bool movePhase;
     public bool attackPhase;
     public bool canMove;
     public bool hasMoved;
     public bool canAttack;
     public bool hasAttacked;
-    public bool unitsPlaced;
+    public bool unitPlaced;
+    public bool setTeamPhase;
+    public bool hasBegun;
+    public GameObject unitBeingPlaced;
+    public GameObject unitBeingPlacedTracker;
     public GameObject selectedUnit;
     public GameObject targetedUnit;
     public GameObject ActiveUnit;
     public GameObject CharTeam;
     public GameObject AITeam;
     public GameObject Canvas;
+    public GameObject TankPrefab;
+    public GameObject ArcherPrefab;
+    public GameObject AssassinPrefab;
+    public GameObject OrcPrefab;
+    public GameObject GoblinPrefab;
+    public GameObject HappyMealPrefab;
+    public GameObject TrackerPrefab;
     public Team ActiveTeam;
     public TileClicking tc;
     public GameObject MoveCircle;
@@ -30,36 +44,38 @@ public class GameManager : MonoBehaviour
     public Text PhaseText;
     public Text ActiveUnitText;
     public Text SelectedUnitText;
+    public GameObject[] PlayerSpawnButtons;
+    public GameObject[] EnemySpawnButtons;
     int activeTeamSize;
     int curActive = 0;
     float SCALE_BASE = 1;
-    float SCALE_SELECTED = 1.2F; 
+    float SCALE_SELECTED = 1.2F;
+    Vector3 START_POSITION = new Vector3(1000, 1000);
+    Quaternion START_DIRECTION = new Quaternion();
     
 
     // Start is called before the first frame update
     void Start()
     {
+        hasBegun = false;
+        totalUnits = 0;
+        setTeamPhase = true;
+        placingUnit = false;
         Instance = this;
-        movePhase = true;
+        movePhase = false;
         canAttack = false;
-        canMove = true;
+        canMove = false;
         hasMoved = false;
         playerControl = true;
-        unitsPlaced = true;
         selectedUnit = null;
         targetedUnit = null;
         ActiveTeam = CharTeam.GetComponent<Team>();
-        ActiveUnit = ActiveTeam.units[0];
-        ActiveUnit.GetComponent<Unit>().hasTurn = true;
-        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
-        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
-        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
         activeTeamSize = ActiveTeam.teamSize;
         TurnText.text = "Player 1 Turn";
-        PhaseText.text = "Move Phase";
+        PhaseText.text = "Team Creation Phase";
         SelectedUnitText.text = "";
-        setActiveUnitText();
-        SetIDs();
+        unitPlaced = false;
+        PlaceUnitsControl();
     }
 
     // Update is called once per frame
@@ -84,9 +100,6 @@ public class GameManager : MonoBehaviour
         //if it does switch player control so the next team can go
         //As well as set the turn to the first unit
         //Iterate through the team and set the turn to the next unit in the team
-
-       
-
         for (int i = curActive;i<=activeTeamSize; i++)
         {
             if (i == activeTeamSize - 1)
@@ -124,7 +137,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Attack()
     {
-        Debug.Log("Enters Attack");
+        
         while(!canAttack || targetedUnit == null)
         {
             if(!attackPhase)
@@ -133,7 +146,7 @@ public class GameManager : MonoBehaviour
             }
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("Exit Attack");
+                
                 yield return null;
             }
             yield return new WaitForSeconds(0.02f);
@@ -155,8 +168,13 @@ public class GameManager : MonoBehaviour
     //Controls the Logic for Player Actions
     public void NextAction()
     {
-        Debug.Log("NEXT");
-        if(movePhase)
+        
+        if(setTeamPhase)
+        {
+            SwitchTeam();
+            return;
+        }
+        else if(movePhase)
         {
             NextActiveUnit();
         }
@@ -184,11 +202,21 @@ public class GameManager : MonoBehaviour
                 break;
         }
         playerControl = !playerControl;
-        movePhase = true;
-        attackPhase = false;
-        canMove = true;
-        curActive = 0;
-        SwitchActiveUnit(ActiveTeam.units[curActive]);
+        if(setTeamPhase)
+        {
+            ActiveTeam.SetTeamButtonsOn();
+        }
+        if(!setTeamPhase)
+        {
+            curActive = 0;
+            movePhase = true;
+            attackPhase = false;
+            canMove = true;
+            if(hasBegun)
+            {
+                SwitchActiveUnit(ActiveTeam.units[curActive]);
+            }
+        }
     }
 
     public void SwitchActiveUnit(GameObject u)
@@ -275,7 +303,7 @@ public class GameManager : MonoBehaviour
     public void setSelectedUnitText()
     {
         SelectedUnitText.text = "Selected Unit: \n";
-        SelectedUnitText.text += "Team: " + selectedUnit.transform.parent.gameObject.name + "\n";
+        //SelectedUnitText.text += "Team: " + selectedUnit.transform.parent.gameObject.name + "\n";
         SelectedUnitText.text += "Name: " + selectedUnit.GetComponent<Unit>().name + "\n";
         SelectedUnitText.text += "Health: " + selectedUnit.GetComponent<Unit>().hitpoints + "\n";
         SelectedUnitText.text += "Movement: " + selectedUnit.GetComponent<Unit>().maxMovement + "\n";
@@ -288,7 +316,7 @@ public class GameManager : MonoBehaviour
     public void setActiveUnitText()
     {
         ActiveUnitText.text = "Active Unit: \n";
-        ActiveUnitText.text += "Team: " + ActiveUnit.transform.parent.gameObject.name + "\n";
+        //ActiveUnitText.text += "Team: " + ActiveUnit.transform.parent.gameObject.name + "\n";
         ActiveUnitText.text += "Name: " + ActiveUnit.GetComponent<Unit>().name + "\n";
         ActiveUnitText.text += "Health: " + ActiveUnit.GetComponent<Unit>().hitpoints + "\n";
         ActiveUnitText.text += "Movement: " + ActiveUnit.GetComponent<Unit>().maxMovement + "\n";
@@ -343,5 +371,140 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    public void SpawnTank()
+    {
+        unitBeingPlaced = Instantiate(TankPrefab, START_POSITION, START_DIRECTION);
+        unitBeingPlacedTracker = Instantiate(TrackerPrefab);
+        unitBeingPlaced.GetComponent<AIDestinationSetter>().target = unitBeingPlacedTracker.transform;
+        unitBeingPlaced.GetComponent<TrackerRemover>().tracker = unitBeingPlacedTracker;
+        foreach(GameObject b in PlayerSpawnButtons)
+        {
+            b.SetActive(false);
+        }
+        placingUnit = true;
+        unitPlaced = false;
+    }
 
+    public void SpawnArcher()
+    {
+        unitBeingPlaced = Instantiate(ArcherPrefab, START_POSITION, START_DIRECTION);
+        unitBeingPlacedTracker = Instantiate(TrackerPrefab);
+        unitBeingPlaced.GetComponent<AIDestinationSetter>().target = unitBeingPlacedTracker.transform;
+        unitBeingPlaced.GetComponent<TrackerRemover>().tracker = unitBeingPlacedTracker;
+        foreach (GameObject b in PlayerSpawnButtons)
+        {
+            b.SetActive(false);
+        }
+        placingUnit = true;
+        unitPlaced = false;
+    }
+
+    public void SpawnAssassin()
+    {
+        unitBeingPlaced = Instantiate(AssassinPrefab, START_POSITION, START_DIRECTION);
+        unitBeingPlacedTracker = Instantiate(TrackerPrefab);
+        unitBeingPlaced.GetComponent<AIDestinationSetter>().target = unitBeingPlacedTracker.transform;
+        unitBeingPlaced.GetComponent<TrackerRemover>().tracker = unitBeingPlacedTracker;
+        foreach (GameObject b in PlayerSpawnButtons)
+        {
+            b.SetActive(false);
+        }
+        placingUnit = true;
+        unitPlaced = false;
+    }
+
+    public void SpawnOrc()
+    {
+        unitBeingPlaced = Instantiate(OrcPrefab, START_POSITION, START_DIRECTION);
+        unitBeingPlacedTracker = Instantiate(TrackerPrefab);
+        unitBeingPlaced.GetComponent<AIDestinationSetter>().target = unitBeingPlacedTracker.transform;
+        unitBeingPlaced.GetComponent<TrackerRemover>().tracker = unitBeingPlacedTracker;
+        foreach (GameObject b in EnemySpawnButtons)
+        {
+            b.SetActive(false);
+        }
+        placingUnit = true;
+        unitPlaced = false;
+    }
+
+    public void SpawnGoblin()
+    {
+        unitBeingPlaced = Instantiate(GoblinPrefab, START_POSITION, START_DIRECTION);
+        unitBeingPlacedTracker = Instantiate(TrackerPrefab);
+        unitBeingPlaced.GetComponent<AIDestinationSetter>().target = unitBeingPlacedTracker.transform;
+        unitBeingPlaced.GetComponent<TrackerRemover>().tracker = unitBeingPlacedTracker;
+        foreach (GameObject b in EnemySpawnButtons)
+        {
+            b.SetActive(false);
+        }
+        placingUnit = true;
+        unitPlaced = false;
+    }
+
+    public void SpawnHappyMeal()
+    {
+        unitBeingPlaced = Instantiate(HappyMealPrefab, START_POSITION, START_DIRECTION);
+        unitBeingPlacedTracker = Instantiate(TrackerPrefab);
+        unitBeingPlaced.GetComponent<AIDestinationSetter>().target = unitBeingPlacedTracker.transform;
+        unitBeingPlaced.GetComponent<TrackerRemover>().tracker = unitBeingPlacedTracker;
+        foreach (GameObject b in EnemySpawnButtons)
+        {
+            b.SetActive(false);
+        }
+        placingUnit = true;
+        unitPlaced = false;
+    }
+
+    public void PlaceUnitsControl()
+    {
+        if(setTeamPhase)
+        {
+            ActiveUnitText.text = "";
+            SelectedUnitText.text = "";
+            if (placingUnit)
+            {
+                foreach (GameObject b in PlayerSpawnButtons)
+                {
+                    b.SetActive(false);
+                }
+                foreach (GameObject b in EnemySpawnButtons)
+                {
+                    b.SetActive(false);
+                }
+                return;
+            }
+            else if (unitPlaced)
+            {
+                NextAction();
+                ActiveTeam.SetTeamButtonsOn();
+            }
+            else
+            {
+                ActiveTeam.GetComponent<Team>().SetTeamButtonsOn();
+            }
+        }
+        else
+        {
+            BeginGame();
+        }
+    }
+
+    public void BeginGame()
+    {
+        Debug.Log("Begin Game Called");
+        CharTeam.GetComponent<Team>().SetTeamButtonsOff();
+        AITeam.GetComponent<Team>().SetTeamButtonsOff();
+        movePhase = true;
+        canMove = true;
+        SwitchTeam();
+        ActiveUnit = ActiveTeam.units[0];
+        ActiveUnit.GetComponent<Unit>().hasTurn = true;
+        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
+        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
+        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
+        hasBegun = true;
+        SetIDs();
+        setActiveUnitText();
+        NextAction();
+    }
 }

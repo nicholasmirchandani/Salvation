@@ -9,6 +9,7 @@ public class Team : MonoBehaviour
     public bool playerControlled;
     public bool hasTurn;
     public int teamSize;
+    public GameObject[] teamButtons;
 
     // Start is called before the first frame update
     void Start()
@@ -20,5 +21,21 @@ public class Team : MonoBehaviour
     void Update()
     {
         teamSize = units.Count;
+    }
+
+    public void SetTeamButtonsOn()
+    {
+        foreach(GameObject b in teamButtons)
+        {
+            b.SetActive(true);
+        }
+    }
+
+    public void SetTeamButtonsOff()
+    {
+        foreach (GameObject b in teamButtons)
+        {
+            b.SetActive(false);
+        }
     }
 }
