@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public bool hasAttacked;
     public bool unitsPlaced;
     public GameObject selectedUnit;
+    public GameObject targetedUnit;
     public GameObject ActiveUnit;
     public GameObject CharTeam;
     public GameObject AITeam;
@@ -137,10 +138,9 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
         Debug.Log("Attacking " + selectedUnit);
-        if(Vector3.Magnitude(ActiveUnit.transform.position-selectedUnit.transform.position)<= ActiveUnit.GetComponent<Unit>().range && canAttack)
+        if(Vector3.Magnitude(ActiveUnit.transform.position-targetedUnit.transform.position)<= ActiveUnit.GetComponent<Unit>().range && canAttack)
         {
-            ActiveUnit.GetComponent<Unit>().Attack(selectedUnit.GetComponent<Unit>());
-            setSelectedUnitText();
+            ActiveUnit.GetComponent<Unit>().Attack(targetedUnit.GetComponent<Unit>());
             canAttack = false;
             hasAttacked = true;
         }
@@ -229,6 +229,11 @@ public class GameManager : MonoBehaviour
         selectedUnit.GetComponent<Unit>().attackCircle.SetActive(true);
         selectedUnit.GetComponent<Unit>().moveCircle.SetActive(true);
         setSelectedUnitText();
+    }
+
+    public void TargetUnit(GameObject unit)
+    {
+        targetedUnit = unit;
     }
 
     public void CheckWin()

@@ -69,7 +69,7 @@ public class Unit : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && GameManager.Instance.attackPhase)
         {
             //attack unit
-            GameManager.Instance.SelectUnit(gameObject);
+            GameManager.Instance.TargetUnit(gameObject);
             GameManager.Instance.canAttack = true;
             return;
 
