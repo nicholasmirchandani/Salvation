@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     public Text SelectedUnitText;
     int activeTeamSize;
     int curActive = 0;
+    float SCALE_BASE = 1;
+    float SCALE_SELECTED = 1.2F; 
     
 
     // Start is called before the first frame update
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
         ActiveUnit.GetComponent<Unit>().hasTurn = true;
         ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
         ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
+        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
         activeTeamSize = ActiveTeam.teamSize;
         TurnText.text = "Player 1 Turn";
         PhaseText.text = "Move Phase";
@@ -197,9 +200,11 @@ public class GameManager : MonoBehaviour
         }
         ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(false);
         ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(false);
+        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_BASE, SCALE_BASE);
         ActiveUnit = u;
         ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
         ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
+        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
         setActiveUnitText();
         if (movePhase)
         {
@@ -290,8 +295,8 @@ public class GameManager : MonoBehaviour
     public void DisplayCircles(GameObject u)
     {
         Unit unit = u.GetComponent<Unit>();
-        float moveScale = unit.maxMovement * 10;
-        float attackScale = unit.range * 10;
+        float moveScale = unit.maxMovement * 9;
+        float attackScale = unit.range * 9;
         unit.moveCircle.transform.localScale = new Vector3(moveScale, moveScale);
         unit.attackCircle.transform.localScale = new Vector3(attackScale, attackScale);
     }
