@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public bool unitPlaced;
     public bool setTeamPhase;
     public bool hasBegun;
+    public bool delaySwitchUnit = true;
     public GameObject unitBeingPlaced;
     public GameObject unitBeingPlacedTracker;
     public GameObject selectedUnit;
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
         PhaseText.text = "Team Creation Phase";
         SelectedUnitText.text = "";
         unitPlaced = false;
+        AITeam.GetComponent<Team>().SetTeamButtonsOff();
         PlaceUnitsControl();
     }
 
