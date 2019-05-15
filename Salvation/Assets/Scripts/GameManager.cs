@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         playerControl = true;
         unitsPlaced = true;
         selectedUnit = null;
+        targetedUnit = null;
         ActiveTeam = CharTeam.GetComponent<Team>();
         ActiveUnit = ActiveTeam.units[0];
         ActiveUnit.GetComponent<Unit>().hasTurn = true;
@@ -124,7 +125,7 @@ public class GameManager : MonoBehaviour
     IEnumerator Attack()
     {
         Debug.Log("Enters Attack");
-        while(!canAttack || selectedUnit == null)
+        while(!canAttack || targetedUnit == null)
         {
             if(!attackPhase)
             {
@@ -137,7 +138,6 @@ public class GameManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.02f);
         }
-        Debug.Log("Attacking " + selectedUnit);
         if(Vector3.Magnitude(ActiveUnit.transform.position-targetedUnit.transform.position)<= ActiveUnit.GetComponent<Unit>().range && canAttack)
         {
             ActiveUnit.GetComponent<Unit>().Attack(targetedUnit.GetComponent<Unit>());
@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviour
         ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
         ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
         setActiveUnitText();
+        clearSelectedUnit();
         if (movePhase)
         {
             tc.player = ActiveUnit;
@@ -319,6 +320,18 @@ public class GameManager : MonoBehaviour
             u.GetComponent<Unit>().id = count;
             count++;
         }
+    }
+
+    public void clearSelectedUnit()
+    {
+        if(selectedUnit == null)
+        {
+            return;
+        }
+        SelectedUnitText.text = "";
+        selectedUnit.GetComponent<Unit>().moveCircle.SetActive(false);
+        selectedUnit.GetComponent<Unit>().attackCircle.SetActive(false);
+        selectedUnit = null;
     }
 
     public bool CheckID()
