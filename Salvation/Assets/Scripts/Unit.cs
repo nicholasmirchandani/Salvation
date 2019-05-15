@@ -108,6 +108,7 @@ public class Unit : MonoBehaviour
         this.damageDone += this.attackDamage;
         u.hitpoints -= this.attackDamage;
         GameManager.Instance.AttackText.text = this.name + " deals " + this.attackDamage + " damage to " + u.name;
+        GameManager.Instance.source.PlayOneShot(GameManager.Instance.attackSound, 1.0f);
         if(u.hitpoints<=0)
         {
             u.Die();
@@ -120,6 +121,7 @@ public class Unit : MonoBehaviour
         hasDied = true;
         attackCircle.SetActive(false);
         moveCircle.SetActive(false);
+        GameManager.Instance.source.PlayOneShot(GameManager.Instance.deathSound, 1.0f);
         GameManager.Instance.CheckWin();
     }
 

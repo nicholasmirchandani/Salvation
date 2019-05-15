@@ -54,7 +54,9 @@ public class GameManager : MonoBehaviour
     float SCALE_SELECTED = 1.2F;
     Vector3 START_POSITION = new Vector3(1000, 1000);
     Quaternion START_DIRECTION = new Quaternion();
-    
+    public AudioSource source;
+    public AudioClip attackSound;
+    public AudioClip deathSound;
     
 
     // Start is called before the first frame update

@@ -402,7 +402,7 @@ MonoBehaviour:
   canMove: 1
   speed: 4
   orientation: 1
-  enableRotation: 1
+  enableRotation: 0
   rotationSpeed: 30
   interpolatePathSwitches: 1
   switchPathInterpolationSpeed: 10
@@ -487,3 +487,4 @@ MonoBehaviour:
   attackCircle: {fileID: 1094474817}
   moveCircle: {fileID: 201060532}
   id: 0
+  attackDamage: 0

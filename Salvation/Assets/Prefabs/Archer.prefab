@@ -86,7 +86,7 @@ MonoBehaviour:
   canMove: 1
   speed: 4
   orientation: 1
-  enableRotation: 1
+  enableRotation: 0
   rotationSpeed: 30
   interpolatePathSwitches: 1
   switchPathInterpolationSpeed: 10
@@ -171,6 +171,7 @@ MonoBehaviour:
   attackCircle: {fileID: 1129835074}
   moveCircle: {fileID: 1180139605}
   id: 0
+  attackDamage: 0
 --- !u!1 &1013288248
 GameObject:
   m_ObjectHideFlags: 0
