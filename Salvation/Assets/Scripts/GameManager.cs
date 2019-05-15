@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     public Text PhaseText;
     public Text ActiveUnitText;
     public Text SelectedUnitText;
+    public Text AttackText;
     public GameObject[] PlayerSpawnButtons;
     public GameObject[] EnemySpawnButtons;
     int activeTeamSize;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         hasBegun = false;
+        AttackText.text = "";
         totalUnits = 0;
         setTeamPhase = true;
         placingUnit = false;

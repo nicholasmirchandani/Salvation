@@ -104,10 +104,10 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit u)
     {
-
         attackDamage = Random.Range(0, damage + 1);
         this.damageDone += this.attackDamage;
         u.hitpoints -= this.attackDamage;
+        GameManager.Instance.AttackText.text = this.name + " deals " + this.attackDamage + " damage to " + u.name;
         if(u.hitpoints<=0)
         {
             u.Die();
