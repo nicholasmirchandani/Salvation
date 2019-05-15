@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
         PhaseText.text = "Move Phase";
         SelectedUnitText.text = "";
         setActiveUnitText();
+        SetIDs();
     }
 
     // Update is called once per frame
@@ -214,7 +215,7 @@ public class GameManager : MonoBehaviour
 
     public void SelectUnit(GameObject unit)
     {
-        if(selectedUnit != null)
+        if(selectedUnit != null && !CheckID())
         {
             selectedUnit.GetComponent<Unit>().attackCircle.SetActive(false);
             selectedUnit.GetComponent<Unit>().moveCircle.SetActive(false);
@@ -293,6 +294,30 @@ public class GameManager : MonoBehaviour
         float attackScale = unit.range * 10;
         unit.moveCircle.transform.localScale = new Vector3(moveScale, moveScale);
         unit.attackCircle.transform.localScale = new Vector3(attackScale, attackScale);
+    }
+
+    public void SetIDs()
+    {
+        int count = 0;
+        foreach(GameObject u in CharTeam.GetComponent<Team>().units)
+        {
+            u.GetComponent<Unit>().id = count;
+            count++;
+        }
+        foreach (GameObject u in AITeam.GetComponent<Team>().units)
+        {
+            u.GetComponent<Unit>().id = count;
+            count++;
+        }
+    }
+
+    public bool CheckID()
+    {
+        if(selectedUnit.GetComponent<Unit>().id == ActiveUnit.GetComponent<Unit>().id)
+        {
+            return true;
+        }
+        return false;
     }
 
 

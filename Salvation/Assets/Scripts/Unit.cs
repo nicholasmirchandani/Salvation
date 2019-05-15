@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour
     bool prevSpaceDown;
     public GameObject attackCircle;
     public GameObject moveCircle;
+    public int id;
 
     // Start is called before the first frame update
     void Start()
