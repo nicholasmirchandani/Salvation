@@ -102,6 +102,12 @@ public class GameManager : MonoBehaviour
     //Set the next unit in the team to their turn
     public void NextActiveUnit()
     {
+        if(!hasBegun)
+        {
+            SwitchActiveUnit(ActiveTeam.units[0]);
+            hasBegun = true;
+            return;
+        }
         int lastInt = activeTeamSize -1; //get the index of the last unit in the team
         //check to see if the last unit in the team has turn
         //if it does switch player control so the next team can go
@@ -233,9 +239,12 @@ public class GameManager : MonoBehaviour
             NextActiveUnit();
             return;
         }
-        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(false);
-        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(false);
-        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_BASE, SCALE_BASE);
+        if(ActiveUnit != null)
+        {
+            ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(false);
+            ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(false);
+            ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_BASE, SCALE_BASE);
+        }
         ActiveUnit = u;
         ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
         ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
@@ -504,15 +513,8 @@ public class GameManager : MonoBehaviour
         movePhase = true;
         canMove = true;
         SwitchTeam();
-        ActiveUnit = ActiveTeam.units[0];
-        ActiveUnit.GetComponent<Unit>().hasTurn = true;
-        ActiveUnit.GetComponent<Unit>().attackCircle.SetActive(true);
-        ActiveUnit.GetComponent<Unit>().moveCircle.SetActive(true);
-        ActiveUnit.GetComponent<Unit>().transform.localScale = new Vector3(SCALE_SELECTED, SCALE_SELECTED);
         PhaseText.text = "Move Phase";
-        hasBegun = true;
         SetIDs();
-        setActiveUnitText();
         NextAction();
     }
 }
