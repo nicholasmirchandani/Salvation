@@ -22,7 +22,6 @@ public class Unit : MonoBehaviour
     public GameObject moveCircle;
     public int id;
     public int attackDamage;
-    
 
     // Start is called before the first frame update
     void Start()
@@ -36,27 +35,18 @@ public class Unit : MonoBehaviour
         moving = false;
         delayCall = false;
         prevSpaceDown = false;
+        GetComponentInChildren<Animator>().SetBool("isMoving", false);
     }
 
     // Update is called once per frame
     void Update()
     {
             moving = !gameObject.GetComponent<IAstarAI>().reachedEndOfPath; //If the unit is moving
-            
-            if (!moving && prevMoving && GameManager.Instance.movePhase)
+
+        if (!moving && prevMoving && GameManager.Instance.movePhase)
             {
-            /*
-                if(delayCall)
-                {
-                    GameManager.Instance.NextAction();
-                }
-                else
-                {
-                    delayCall = true;
-                }
-                */
-            GameManager.Instance.NextAction();
-        }
+                GameManager.Instance.NextAction();
+            }
             prevMoving = moving;
     }
 
@@ -107,8 +97,15 @@ public class Unit : MonoBehaviour
         attackDamage = Random.Range(0, damage + 1);
         this.damageDone += this.attackDamage;
         u.hitpoints -= this.attackDamage;
-        GameManager.Instance.AttackText.text = this.name + " deals " + this.attackDamage + " damage to " + u.name;
-        GameManager.Instance.source.PlayOneShot(GameManager.Instance.attackSound, 1.0f);
+        if(attackDamage == 0)
+        {
+            GameManager.Instance.AttackText.text = this.name + " missed "  + u.name;
+        }
+        else
+        {
+            GameManager.Instance.AttackText.text = this.name + " deals " + this.attackDamage + " damage to " + u.name;
+            GameManager.Instance.source.PlayOneShot(GameManager.Instance.attackSound, 1.0f);
+        }
         if(u.hitpoints<=0)
         {
             u.Die();
