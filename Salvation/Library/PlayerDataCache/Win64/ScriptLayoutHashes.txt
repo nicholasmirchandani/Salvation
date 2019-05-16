@@ -1,9 +1,8 @@
 Win64
 PlayerPath?
-C:/Users/dude1/Desktop/Git Projects/Salvation/Salvation/Builds/Salvation.exe
+C:/Users/nicho/Desktop/Git Projects/Salvation/Salvation/Builds/Salvation.exe
 SceneListBegin?
 Assets/Scenes/MainMenu.unity
-Assets/Scenes/Nic Scene.unity
 Assets/Scenes/Test Scene.unity
 SceneListEnd?
 557b8d683142468c7c52e0163c1928a6 AstarPathfindingProject.dll:Pathfinding.ProceduralGridMover
